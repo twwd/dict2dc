@@ -1,0 +1,67 @@
+[project]
+name = "dict2dc"
+version = "0.0.1"
+description = "Helpers to parse dicts, e.g., from JSON parsing, to dataclasses."
+readme = "README.md"
+authors = [
+    { name = "Tim Walter", email = "tim.walter@iteratec.com" }
+]
+requires-python = ">=3.12"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: File Formats :: JSON",
+    "License :: OSI Approved :: MIT License"
+]
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = ["dataclass", "dataclasses", "dict", "json", "serialization", "parsing", "conversion"]
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.5.1",
+    "pytest>=9.0.2",
+    "ruff>=0.14.14",
+]
+
+[project.urls]
+Homepage = "https://github.com/twwd/dict2dc"
+Issues = "https://github.com/twwd/dict2dc/issues"
+
+[build-system]
+requires = ["uv_build>=0.9.26,<0.10.0"]
+build-backend = "uv_build"
+
+[tool.ruff]
+src = ["src", "tests"]
+line-length = 120
+indent-width = 4
+
+[tool.ruff.lint]
+select = ["E", "F", "C90", "N", "RUF", "PL", "S"]
+ignore = [
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "lf"
+
+[tool.ruff.lint.extend-per-file-ignores]
+"tests/**/*.py" = [
+    "S101", # asserts allowed in tests...
+    "ARG", # Unused function args -> fixtures nevertheless are functionally relevant...
+    "FBT", # Don't care about booleans as positional arguments in tests, e.g. via @pytest.mark.parametrize()
+    "PLR2004", # Magic value used in comparison, ...
+    "S311", # Standard pseudo-random generators are not suitable for cryptographic purposes
+]
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
+pythonpath = "src"
+testpaths = "tests"
+python_classes = "*TestSuite"
