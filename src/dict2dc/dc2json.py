@@ -46,7 +46,12 @@ class Dc2Json:
 
     @as_serializable.register(set)
     def _handle_set(self, seq: set):
-        converted = sorted(self.as_serializable(v) for v in seq)
+        converted = [self.as_serializable(v) for v in seq]
+        # Try to sort the set
+        try:
+            converted = sorted(converted)
+        except TypeError:
+            pass
         return [v for v in converted if v is not UNSERIALIZABLE]
 
     @as_serializable.register(datetime.date)

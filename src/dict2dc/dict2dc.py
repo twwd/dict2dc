@@ -38,12 +38,11 @@ class Dict2Dc:
         :param special_conversions: Special conversions for some types.
         :param replace: Whether the default conversions should be replaced or not updated.
         """
-        self._special_conversions: dict[type, Callable[[typing.Any], typing.Any]] = DEFAULT_CONVERSION.copy()
+        self._special_conversions: dict[type, Callable[[typing.Any], typing.Any]] = (
+            DEFAULT_CONVERSION.copy() if not replace else {}
+        )
         if special_conversions is not None:
-            if replace:
-                self._special_conversions = special_conversions
-            else:
-                self._special_conversions.update(special_conversions)
+            self._special_conversions.update(special_conversions)
         super().__init__()
 
     @staticmethod
