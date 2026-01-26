@@ -22,7 +22,6 @@ wheels = [
 
 [[package]]
 name = "dict2dc"
-version = "0.0.1"
 source = { editable = "." }
 
 [package.dev-dependencies]

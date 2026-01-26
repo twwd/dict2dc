@@ -1,6 +1,5 @@
 [project]
 name = "dict2dc"
-version = "0.0.1"
 description = "Helpers to parse dicts, e.g., from JSON parsing, to dataclasses."
 readme = "README.md"
 authors = [
@@ -17,6 +16,7 @@ license = "MIT"
 license-files = ["LICENSE"]
 keywords = ["dataclass", "dataclasses", "dict", "json", "serialization", "parsing", "conversion"]
 dependencies = []
+dynamic = ["version"]
 
 [dependency-groups]
 dev = [
@@ -30,8 +30,14 @@ Homepage = "https://github.com/twwd/dict2dc"
 Issues = "https://github.com/twwd/dict2dc/issues"
 
 [build-system]
-requires = ["uv_build>=0.9.26,<0.10.0"]
-build-backend = "uv_build"
+requires = ["hatchling", "uv-dynamic-versioning"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "uv-dynamic-versioning"
+
+[tool.uv-dynamic-versioning]
+fallback-version = "0.0.1"
 
 [tool.ruff]
 src = ["src", "tests"]
