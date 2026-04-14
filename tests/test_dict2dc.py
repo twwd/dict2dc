@@ -6,7 +6,6 @@ from collections.abc import Sequence, Collection
 from typing import Literal
 
 import pytest
-
 from dict2dc.dict2dc import Dict2Dc
 from dict2dc.models.base import UNTOUCHED, UNTOUCHED_TYPE
 
@@ -234,6 +233,14 @@ class DataclassWithUnionReversed:
     child: UnionTypeB | UnionTypeA
 
 
+type DataclassTypeAliasUnion = UnionTypeA | UnionTypeB
+
+
+@dataclasses.dataclass
+class DataclassWithUnionAsType:
+    child: DataclassTypeAliasUnion
+
+
 @pytest.mark.parametrize(
     ("data", "cls", "expected"),
     [
@@ -243,6 +250,7 @@ class DataclassWithUnionReversed:
         ({"child": {"a": None}}, DataclassWithUnion, DataclassWithUnion(child=UnionTypeA(a=None))),
         ({"child": {}}, DataclassWithUnion, DataclassWithUnion(child=UnionTypeA())),
         ({"child": {}}, DataclassWithUnionReversed, DataclassWithUnionReversed(child=UnionTypeB())),
+        ({"child": {"a": "VALUE"}}, DataclassWithUnionAsType, DataclassWithUnionAsType(child=UnionTypeA(a="VALUE"))),
     ],
 )
 def test_from_dict__given_multiple_fitting_union_types(uut: Dict2Dc, data, cls, expected):

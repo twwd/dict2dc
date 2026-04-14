@@ -9,6 +9,7 @@ import types
 import typing
 from collections.abc import Collection, Callable
 from inspect import isabstract
+from typing import TypeAliasType
 
 from dict2dc.models.base import UNTOUCHED_TYPE
 from dict2dc.models.parsing import DictToDataclassConversionError, FieldResult
@@ -63,6 +64,11 @@ class Dict2Dc:
         :param cls_: the type it should match
         :return: whether the value matches the given type
         """
+
+        # First, we need to resolve type aliases since they cannot be used with isinstance etc.
+        if isinstance(cls_, TypeAliasType):
+            cls_ = cls_.__value__
+
         self._ensure_type(cls_)
 
         # if the type has a generic, isinstance does not work; thus we need the type without the generic
@@ -252,6 +258,7 @@ class Dict2Dc:
             or is_union(cls_)
             or typing.get_origin(cls_) is typing.Literal
             or isinstance(cls_, types.GenericAlias)
+            or isinstance(cls_, typing.TypeAliasType)
         ):
             raise TypeError(f"Class parameter {cls_!r} of type {type(cls_)} is not a valid type.")
 
