@@ -20,9 +20,9 @@ dynamic = ["version"]
 
 [dependency-groups]
 dev = [
-    "pre-commit>=4.5.1",
-    "pytest>=9.0.2",
-    "ruff>=0.14.14",
+    "pre-commit>=4.6.0",
+    "pytest>=9.0.3",
+    "ruff>=0.15.12",
 ]
 
 [project.urls]
@@ -38,6 +38,9 @@ source = "uv-dynamic-versioning"
 
 [tool.uv-dynamic-versioning]
 fallback-version = "0.0.1"
+
+[tool.uv]
+exclude-newer = "3 days"
 
 [tool.ruff]
 src = ["src", "tests"]
