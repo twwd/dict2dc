@@ -1,3 +1,7 @@
+<div align="center">
+    <img src="docs/assets/dict2dc-social.svg" width="640" height="320" alt="" role="presentation"/>
+</div>
+
 # dict2dc - dictionary to dataclass parsing
 
 ![Python](https://img.shields.io/pypi/pyversions/dict2dc.svg)
