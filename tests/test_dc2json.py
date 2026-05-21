@@ -6,7 +6,7 @@ import uuid
 
 import pytest
 
-from dict2dc.dc2json import UNSERIALIZABLE, Dc2Json, DcJsonEncoder
+from dict2dc.dc2json import UNSERIALIZABLE, Dc2Json, DcJsonEncoder, Dc2JsonWithoutNull
 from dict2dc.models.base import UNTOUCHED, UNTOUCHED_TYPE
 
 DATETIME_STRING = "2023-10-10T05:13:35.123456+00:00"
@@ -48,6 +48,7 @@ class TestDataClass:
         ({1: "A", "B": UNTOUCHED}, {"1": "A"}),
         (DATETIME, DATETIME_STRING),
         ([{"A": {"b", "c", "a"}}, 42], [{"A": ["a", "b", "c"]}, 42]),
+        (TestDataClassSimple(True, None), {"active": True, "child": None}),
         (TestDataClassSimple(True, TestDataSubClass("CHILD")), {"active": True, "child": {"name": "CHILD"}}),
         (decimal.Decimal("47.11"), "47.11"),
     ],
@@ -84,3 +85,14 @@ def test_dataclass_json_encoder__given_a_value_for_a_otherwise_untouched_field()
     )
 
     assert actual == expected
+
+
+@pytest.mark.parametrize(
+    ["given", "expected"],
+    [
+        (TestDataClassSimple(True, None), {"active": True}),
+        (TestDataClassSimple(True, TestDataSubClass("CHILD")), {"active": True, "child": {"name": "CHILD"}}),
+    ],
+)
+def test_json_serializable__without_null(given, expected):
+    assert Dc2JsonWithoutNull().as_serializable(given) == expected
