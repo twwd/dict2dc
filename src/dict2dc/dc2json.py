@@ -5,6 +5,7 @@ import json
 import typing
 import uuid
 from functools import singledispatchmethod
+from types import NoneType
 
 UNSERIALIZABLE = object()
 
@@ -84,6 +85,31 @@ class DcJsonEncoder(json.JSONEncoder):
     """
 
     dc2json = Dc2Json()
+
+    def default(self, obj):
+        return self.dc2json.as_serializable(obj)
+
+
+class Dc2JsonWithoutNull(Dc2Json):
+    """
+    Variant of Dc2Json that maps None values to UNSERIALIZABLE to be skipped from the output.
+    """
+
+    @singledispatchmethod
+    def as_serializable(self, obj: typing.Any):
+        return super().as_serializable(obj)
+
+    @as_serializable.register(NoneType)
+    def _handle_none(self, _: NoneType):
+        return UNSERIALIZABLE
+
+
+class DcJsonWithoutNullEncoder(json.JSONEncoder):
+    """
+    JSONEncoder similar to ~DcJsonEncoder but skips keys with null values.
+    """
+
+    dc2json = Dc2JsonWithoutNull()
 
     def default(self, obj):
         return self.dc2json.as_serializable(obj)
