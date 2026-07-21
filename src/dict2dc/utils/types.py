@@ -1,15 +1,21 @@
-from types import UnionType
-from typing import TypeVar, Union, get_origin
+import types
+import typing
 
-T = TypeVar("T")
+T = typing.TypeVar("T")
 
 
 def is_union(t: type) -> bool:
     """
-    Borrowed from https://stackoverflow.com/a/74546180
-
     :param t: the type to check
     :return: whether the type is a union type
     """
-    origin = get_origin(t)
-    return origin is Union or origin is UnionType
+    # Unwrap PEP 695 `type` statement aliases
+    if isinstance(t, typing.TypeAliasType):
+        t = t.__value__
+
+    # X | Y syntax (Python 3.10+)
+    if isinstance(t, types.UnionType):
+        return True
+
+    # typing.Union[X, Y]
+    return typing.get_origin(t) is typing.Union

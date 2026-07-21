@@ -2,10 +2,11 @@ import dataclasses
 import datetime
 import decimal
 import uuid
-from collections.abc import Sequence, Collection
+from collections.abc import Collection, Sequence
 from typing import Literal
 
 import pytest
+
 from dict2dc.dict2dc import Dict2Dc
 from dict2dc.models.base import UNTOUCHED, UNTOUCHED_TYPE
 

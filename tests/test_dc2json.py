@@ -6,11 +6,11 @@ import uuid
 
 import pytest
 
-from dict2dc.dc2json import UNSERIALIZABLE, Dc2Json, DcJsonEncoder, Dc2JsonWithoutNull
+from dict2dc.dc2json import UNSERIALIZABLE, Dc2Json, Dc2JsonWithoutNull, DcJsonEncoder
 from dict2dc.models.base import UNTOUCHED, UNTOUCHED_TYPE
 
 DATETIME_STRING = "2023-10-10T05:13:35.123456+00:00"
-DATETIME = datetime.datetime(2023, 10, 10, 5, 13, 35, microsecond=123456, tzinfo=datetime.timezone.utc)
+DATETIME = datetime.datetime(2023, 10, 10, 5, 13, 35, microsecond=123456, tzinfo=datetime.UTC)
 
 
 @dataclasses.dataclass

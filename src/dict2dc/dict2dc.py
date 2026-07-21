@@ -3,12 +3,11 @@ import dataclasses
 import datetime
 import functools
 import logging
-from types import NoneType
-
 import types
 import typing
-from collections.abc import Collection, Callable
+from collections.abc import Callable, Collection
 from inspect import isabstract
+from types import NoneType
 from typing import TypeAliasType
 
 from dict2dc.models.base import UNTOUCHED_TYPE
@@ -164,12 +163,11 @@ class Dict2Dc:
                             type_matches=True,
                             matching_score=matching_score,
                         )
-                    else:
-                        # for backwards-compatibility,
-                        # we return a list for a generic Collection or Sequence instead of a tuple
-                        return FieldResult(
-                            value=[result.value for result in results], type_matches=True, matching_score=matching_score
-                        )
+                    # for backwards-compatibility,
+                    # we return a list for a generic Collection or Sequence instead of a tuple
+                    return FieldResult(
+                        value=[result.value for result in results], type_matches=True, matching_score=matching_score
+                    )
         # not applicable
         return None
 
@@ -257,17 +255,15 @@ class Dict2Dc:
             isinstance(cls_, type)
             or is_union(cls_)
             or typing.get_origin(cls_) is typing.Literal
-            or isinstance(cls_, types.GenericAlias)
-            or isinstance(cls_, typing.TypeAliasType)
+            or isinstance(cls_, (types.GenericAlias, typing.TypeAliasType))
         ):
             raise TypeError(f"Class parameter {cls_!r} of type {type(cls_)} is not a valid type.")
 
     @staticmethod
     def _handle_constructor(cls_: type, cls_without_generics: type, value: typing.Any) -> FieldResult | None:
         if (
-            cls_ == UNTOUCHED_TYPE
+            cls_ in (UNTOUCHED_TYPE, NoneType)
             or issubclass(cls_without_generics, collections.abc.Iterable)
-            or cls_ == NoneType
             or not isinstance(value, str)
         ):
             return None
@@ -387,8 +383,7 @@ class Dict2Dc:
             return field_type
 
         resolved = typing.get_type_hints(cls_)
-        field_type = resolved[field.name]
-        return field_type
+        return resolved[field.name]
 
     def map_to(self, d: D2, cls: type[D]) -> D | None:
         """

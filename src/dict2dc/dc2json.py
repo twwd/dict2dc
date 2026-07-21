@@ -1,3 +1,4 @@
+import contextlib
 import dataclasses
 import datetime
 import decimal
@@ -49,10 +50,8 @@ class Dc2Json:
     def _handle_set(self, seq: set):
         converted = [self.as_serializable(v) for v in seq]
         # Try to sort the set
-        try:
+        with contextlib.suppress(TypeError):
             converted = sorted(converted)
-        except TypeError:
-            pass
         return [v for v in converted if v is not UNSERIALIZABLE]
 
     @as_serializable.register(datetime.date)

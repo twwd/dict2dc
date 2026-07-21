@@ -34,8 +34,7 @@ class Dc2Query:
                 # Ignore None and untouched
                 obj_as_dict.pop(key)
                 continue
-            else:
-                updated_value = self._convert(value)
+            updated_value = self._convert(value)
 
             obj_as_dict[key] = updated_value
 
@@ -57,7 +56,7 @@ class Dc2Query:
 
     @_convert.register(set)
     def _(self, value: set) -> str | None:
-        return ",".join(list(sorted(map(str, value))))
+        return ",".join(sorted(map(str, value)))
 
     @_convert.register(list)
     def _(self, value: list) -> str:
