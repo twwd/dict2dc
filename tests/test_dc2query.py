@@ -2,7 +2,7 @@ import dataclasses
 import datetime
 
 from dict2dc.dc2query import Dc2Query
-from dict2dc.models.base import UNTOUCHED_TYPE, UNTOUCHED
+from dict2dc.models.base import UNTOUCHED, UNTOUCHED_TYPE
 
 
 @dataclasses.dataclass

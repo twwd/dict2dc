@@ -1,10 +1,11 @@
-from typing import TypeAlias
+from typing import TypeAlias, Union
 
 import pytest
 
 from dict2dc.utils.types import is_union
 
-example_union_type: TypeAlias = None | int
+example_union_type: TypeAlias = None | int  # noqa: UP040
+type example_union_type2 = None | int
 
 
 @pytest.mark.parametrize(
@@ -14,7 +15,9 @@ example_union_type: TypeAlias = None | int
         (str, False),
         (int, False),
         (example_union_type, True),
+        (example_union_type2, True),
         (str | bool, True),
+        (Union[str, bool], True),  # noqa: UP007
         (list[str], False),
     ],
 )

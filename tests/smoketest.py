@@ -1,7 +1,7 @@
 import dataclasses
+import datetime
 import json
 import sys
-import datetime
 from collections.abc import Collection
 
 from dict2dc.dc2json import Dc2Json, DcJsonEncoder
@@ -39,7 +39,7 @@ def main():
 
     serialized = Dc2Json().as_serializable(instance)
 
-    if not serialized == d:
+    if serialized != d:
         return 40
 
     print(json.dumps(instance, cls=DcJsonEncoder))
